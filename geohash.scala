@@ -57,12 +57,9 @@ class Geohash(lat: Double, lon: Double) {
 
     val DEFAULT_PRECISION = 12
 
-    def toString(len: Int): String = hash.take(len).toList.mkString
+    def toString(len: Int): String = hash take len mkString
 
     override def toString = toString(DEFAULT_PRECISION)
-
-    val neighbors: Char => String = {
-    }
 }
 
 object Test {
