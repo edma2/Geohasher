@@ -4,9 +4,7 @@
 class FloatEncoder(v: Double, max: Double)  {
     assert(v.abs <= max)
 
-    def encode: Stream[Int] = {
-        encode(max, 0)
-    }
+    def encode: Stream[Int] = encode(max, 0)
 
     def encode(width: Double, midpoint: Double): Stream[Int] = {
         val w = width/2
