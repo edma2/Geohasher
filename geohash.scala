@@ -27,9 +27,9 @@ class CoordEncoder(var lat: Double, var lon: Double) {
     val lonBits = new LonEncoder(lon).encode
 
     /* Stream((1,2),(3,4),(5,6)...) => Stream(1,2,3,4,5,6,...) */
-    def explode[T](z: Stream[Tuple2[T,T]]): Stream[T] = {
-        if (z.isEmpty) Stream.empty
-        else z.head._1 #:: z.head._2 #:: explode(z.tail)
+    def explode(z: Stream[(Int,Int)]): Stream[Int] = z match {
+        case Stream.Empty => Stream.Empty
+        case (a, b) #:: rest => a #:: b #:: explode(rest)
     }
 
     def encode: Stream[Int] = explode(lonBits zip latBits)
@@ -38,7 +38,7 @@ class CoordEncoder(var lat: Double, var lon: Double) {
 /** Base 32 Encoder from a Stream of bits (Ints). */
 object Base32 {
     val BASE32 = "0123456789bcdefghjkmnpqrstuvwxyz"
-    val POWERS: Array[Int] = Array(16,8,4,2,1)
+    val POWERS = Array(16,8,4,2,1)
 
     def encode(bits: Stream[Int]): Stream[Char] = {
         val ch = BASE32((bits zip POWERS).collect{case(a,b) => a*b}.sum) 
